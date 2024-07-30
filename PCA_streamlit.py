@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,8 +8,36 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 import matplotlib.pyplot as plt
+from PIL import Image
 
-st.title("PCA and Logistic Regression Comparison")
+
+
+
+# Add some space
+st.sidebar.write(" ")
+
+# Add contributors section with links to their GitHub profiles
+st.sidebar.markdown("### Creator:")
+st.sidebar.markdown("""
+- [Mehdi Seyedebrahimi](https://github.com/mirmehdi)
+""")
+
+# # Add client Section
+st.sidebar.markdown("### Interactive Interface _ Data Analytics:")
+st.sidebar.markdown("""
+- [Berlin Business School and Innovation GmbH ](https://www.berlinsbi.com/)
+""")
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
+image_path_1 = os.path.join(current_dir, 'logo.png')
+image = Image.open(image_path_1) 
+st.markdown(f"""
+                <img src="data:image/png;base64,{st.image(image, caption=None, use_column_width=False, width=670)}">
+            """, unsafe_allow_html=True)
+
+
+
+st.title("Dimensionality Reduction with PCA")
 
 # Step 1: Upload CSV File
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -28,6 +57,7 @@ if uploaded_file is not None:
     df_subset = df[features].dropna()
     df_response = df.loc[df_subset.index, target]
 
+    st.title("Data source summary")
     # Display data matrix and summary
     st.write("DataFrame Summary:")
     st.write(df.describe())
@@ -48,7 +78,7 @@ if uploaded_file is not None:
     pca.fit(scaled_data)
     explained_variance_ratio = pca.explained_variance_ratio_
     cumulative_explained_variance = np.cumsum(explained_variance_ratio)
-
+    st.title("Eigenvector plot")
     # Plot the eigenvalues (scree plot)
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, marker='o', linestyle='--')
@@ -57,6 +87,7 @@ if uploaded_file is not None:
     ax.set_ylabel('Eigenvalue')
     st.pyplot(fig)
 
+    st.title("Cummulative explained variance; ratio of sum of each eigenvectors to sum of all eigenvectors")
     # Plot the cumulative explained variance
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(range(1, len(cumulative_explained_variance) + 1), cumulative_explained_variance, marker='o', linestyle='--')
@@ -66,6 +97,7 @@ if uploaded_file is not None:
     ax.set_ylabel('Cumulative Explained Variance')
     st.pyplot(fig)
 
+    st.title("Choose the number of PC components")
     # Step 4: Choose the number of principal components
     num_components = st.slider("Select number of principal components", 
                                min_value=1, 
@@ -100,7 +132,7 @@ if uploaded_file is not None:
         y_pred_pca = model_pca.predict(X_test_pca)
         accuracy_pca = accuracy_score(y_test_pca, y_pred_pca)
         report_pca = classification_report(y_test_pca, y_pred_pca, output_dict=True)
-
+        st.title("Result of ML model after PCA and dimenssionality reduction")
         st.write("Model with PCA features")
         st.write(f"Accuracy: {accuracy_pca:.2f}")
         st.write(pd.DataFrame(report_pca).transpose())
@@ -111,7 +143,8 @@ if uploaded_file is not None:
         y_pred_all = model_all.predict(X_test_all)
         accuracy_all = accuracy_score(y_test_all, y_pred_all)
         report_all = classification_report(y_test_all, y_pred_all, output_dict=True)
-
+        
+        st.title("Result of ML model using raw data")
         st.write("Model with all features")
         st.write(f"Accuracy: {accuracy_all:.2f}")
         st.write(pd.DataFrame(report_all).transpose())
