@@ -19,7 +19,7 @@ st.sidebar.write(" ")
 # Add contributors section with links to their GitHub profiles
 st.sidebar.markdown("### Creator:")
 st.sidebar.markdown("""
-- [Mehdi Seyedebrahimi](https://github.com/mirmehdi)
+- [Mehdi Seyedebrahimi (git URL)](https://github.com/mirmehdi)
 """)
 
 # # Add client Section
@@ -60,12 +60,11 @@ if uploaded_file is not None:
     st.title("Data source summary")
     # Display data matrix and summary
     st.write("DataFrame Summary:")
-    st.write(df.describe())
+    st.write("Data: 13 features (info) about 2500 customers are used to predict if they will respond positively to our product or not.")
+    st.write(df_subset.head(10))
+    st.write("Features:")
     buffer = pd.DataFrame({
-        'Columns': df.columns,
-        'Data Types': df.dtypes,
-        'Missing Values': df.isnull().sum(),
-        'Unique Values': df.nunique()
+        'Columns': df_subset.columns,
     })
     st.write(buffer)
 
