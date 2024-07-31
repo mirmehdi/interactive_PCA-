@@ -130,7 +130,7 @@ if uploaded_file is not None:
     st.title("Result of ML model after PCA and dimensionality reduction")
     st.write("Model with PCA features")
     st.write(f"Accuracy: {accuracy_pca:.2f}")
-    st.write(pd.DataFrame(report_pca).transpose())
+    #st.write(pd.DataFrame(report_pca).transpose())
 
     # Train and evaluate Random Forest Classifier with all features
     model_all = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -142,4 +142,4 @@ if uploaded_file is not None:
     st.title("Result of ML model using raw data")
     st.write("Model with all features")
     st.write(f"Accuracy: {accuracy_all:.2f}")
-    st.write(pd.DataFrame(report_all).transpose())
+    #st.write(pd.DataFrame(report_all).transpose())
